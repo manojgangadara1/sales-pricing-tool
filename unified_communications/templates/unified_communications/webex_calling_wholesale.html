@@ -56,12 +56,16 @@
         .sub-section {
             margin-left: 20px;
         }
-        .select2-container {
-            width: 100% !important; /* Make Select2 full width */
+        .checkbox-group label {
+            display: block; /* Display each label on a new line */
+            margin-bottom: 5px; /* Space between checkboxes */
+            cursor: pointer;
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px; /* Space between checkbox and label */
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
         // Function to allow only numeric input but also allow backspace, delete, and arrow keys
         function preventNonNumericInput(event) {
@@ -74,22 +78,18 @@
             }
         }
 
-        // Initialize Select2 on page load
         $(document).ready(function() {
-            $('#phoneSelect').select2({
-                placeholder: "Select Phones",
-                allowClear: true
-            });
-
-            // Update count inputs on change
-            $('#phoneSelect').on('change', function() {
+            // Update count inputs on checkbox change
+            $('input[name="phoneCheckbox"]').on('change', function() {
                 updatePhoneCounts();
             });
         });
 
         // Function to update selected phones and display corresponding count inputs
         function updatePhoneCounts() {
-            const selectedPhones = $('#phoneSelect').val();
+            const selectedPhones = $('input[name="phoneCheckbox"]:checked').map(function() {
+                return this.value;
+            }).get();
             const phoneCountInputs = document.getElementById("phone_count_inputs");
 
             // Clear existing inputs
@@ -154,13 +154,12 @@
             <!-- Phones Subsection -->
             <div class="sub-section">
                 <h3>Phones</h3>
-                <select id="phoneSelect" multiple>
-                    <option value="Cisco_9841">Cisco 9841</option>
-                    <option value="Cisco_9851">Cisco 9851</option>
-                    <option value="Cisco_8832">Cisco 8832</option>
-                    <option value="Cisco_8845">Cisco 8845</option>
-                    <option value="Cisco_8865">Cisco 8865</option>
-                </select>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="phoneCheckbox" value="Cisco_9841">Cisco 9841</label>
+                    <label><input type="checkbox" name="phoneCheckbox" value="Cisco_9851">Cisco 9851</label>
+                    <label><input type="checkbox" name="phoneCheckbox" value="Cisco_8832">Cisco 8832</label>
+                    <label><input type="checkbox" name="phoneCheckbox" value="Cisco_8845">Cisco 8845</label>
+                </div>
                 <div id="phone_count_inputs"></div>
             </div>
 
@@ -179,6 +178,3 @@
     </form>
 </body>
 </html>
-
-
-test<!---->
