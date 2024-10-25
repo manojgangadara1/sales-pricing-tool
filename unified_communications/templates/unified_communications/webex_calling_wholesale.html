@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webex Calling Wholesale Pricing Tool</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+        }
+        label {
+            font-size: 16px;
+            width: 60%;
+        }
+        input[type="number"], input[type="text"] {
+            width: 35%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .sub-section {
+            margin-left: 20px;
+        }
+        .select2-container {
+            width: 100% !important; /* Make Select2 full width */
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        // Function to allow only numeric input but also allow backspace, delete, and arrow keys
+        function preventNonNumericInput(event) {
+            const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+            if (allowedKeys.includes(event.key)) {
+                return;
+            }
+            if (event.key < '0' || event.key > '9') {
+                event.preventDefault();
+            }
+        }
+
+        // Initialize Select2 on page load
+        $(document).ready(function() {
+            $('#phoneSelect').select2({
+                placeholder: "Select Phones",
+                allowClear: true
+            });
+
+            // Update count inputs on change
+            $('#phoneSelect').on('change', function() {
+                updatePhoneCounts();
+            });
+        });
+
+        // Function to update selected phones and display corresponding count inputs
+        function updatePhoneCounts() {
+            const selectedPhones = $('#phoneSelect').val();
+            const phoneCountInputs = document.getElementById("phone_count_inputs");
+
+            // Clear existing inputs
+            phoneCountInputs.innerHTML = "";
+
+            // Create a count input for each selected phone
+            selectedPhones.forEach(phone => {
+                const formGroup = document.createElement("div");
+                formGroup.className = "form-group";
+
+                const label = document.createElement("label");
+                label.htmlFor = phone + "_count";
+                label.textContent = `${phone.replace("_", " ")} Count:`;
+
+                const input = document.createElement("input");
+                input.type = "number";
+                input.id = phone + "_count";
+                input.name = phone + "_count";
+                input.min = "0";
+                input.placeholder = "Enter count";
+                input.onkeydown = preventNonNumericInput;
+
+                formGroup.appendChild(label);
+                formGroup.appendChild(input);
+                phoneCountInputs.appendChild(formGroup);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Webex Calling Wholesale Pricing Tool</h1>
+
+    <form action="/calculate-pricing" method="post">
+        <!-- Licenses Section -->
+        <div class="section">
+            <h2>Licenses</h2>
+            <div class="form-group">
+                <label for="webex_user_count">Webex User Count:</label>
+                <input type="number" id="webex_user_count" name="webex_user_count" min="0" placeholder="Enter count" onkeydown="preventNonNumericInput(event)" required>
+            </div>
+
+            <div class="form-group">
+                <label for="enhanced_calling_user_count">Enhanced Calling User Count:</label>
+                <input type="number" id="enhanced_calling_user_count" name="enhanced_calling_user_count" min="0" placeholder="Enter count" onkeydown="preventNonNumericInput(event)" required>
+            </div>
+
+            <div class="form-group">
+                <label for="common_area_user_count">Common Area User Count:</label>
+                <input type="number" id="common_area_user_count" name="common_area_user_count" min="0" placeholder="Enter count" onkeydown="preventNonNumericInput(event)" required>
+            </div>
+
+            <div class="form-group">
+                <label for="customer_experience_user_count">Customer Experience User Count:</label>
+                <input type="number" id="customer_experience_user_count" name="customer_experience_user_count" min="0" placeholder="Enter count" onkeydown="preventNonNumericInput(event)" required>
+            </div>
+        </div>
+
+        <!-- Hardware Section -->
+        <div class="section">
+            <h2>Hardware</h2>
+
+            <!-- Phones Subsection -->
+            <div class="sub-section">
+                <h3>Phones</h3>
+                <select id="phoneSelect" multiple>
+                    <option value="Cisco_9841">Cisco 9841</option>
+                    <option value="Cisco_9851">Cisco 9851</option>
+                    <option value="Cisco_8832">Cisco 8832</option>
+                    <option value="Cisco_8845">Cisco 8845</option>
+                    <option value="Cisco_8865">Cisco 8865</option>
+                </select>
+                <div id="phone_count_inputs"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="analog_gateway">Analog Gateway:</label>
+                <input type="number" id="analog_gateway" name="analog_gateway" min="0" placeholder="Enter count" onkeydown="preventNonNumericInput(event)" required>
+            </div>
+
+            <div class="form-group">
+                <label for="survivability_gateway">Survivability Gateway:</label>
+                <input type="number" id="survivability_gateway" name="survivability_gateway" min="0" placeholder="Enter count" onkeydown="preventNonNumericInput(event)" required>
+            </div>
+        </div>
+
+        <button type="submit">Calculate Pricing</button>
+    </form>
+</body>
+</html>
+
+
+test<!---->

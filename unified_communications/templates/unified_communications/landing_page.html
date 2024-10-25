@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Communications</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Clean font */
+            background-color: #f9f9f9;      /* Light background color */
+            margin: 0;                      /* Remove default margin */
+            padding: 20px;                  /* Add padding */
+        }
+        .button-row {
+            display: flex;                  /* Use flexbox for alignment */
+            justify-content: center;        /* Center the buttons */
+            margin-bottom: 20px;           /* Space between rows */
+        }
+        a {
+            margin: 10px;                  /* Space between buttons */
+            padding: 10px 20px;            /* Padding for buttons */
+            font-size: 16px;               /* Font size for button text */
+            cursor: pointer;               /* Pointer cursor on hover */
+            border: 1px solid #007BFF;     /* Button border */
+            background-color: #007BFF;     /* Button background color */
+            color: white;                  /* Button text color */
+            border-radius: 4px;            /* Rounded button corners */
+            text-decoration: none;         /* Remove underline from links */
+            display: inline-block;         /* Make links behave like buttons */
+            transition: background-color 0.3s; /* Smooth transition for hover */
+            flex: 1;                       /* Allow buttons to grow equally */
+            max-width: 200px;              /* Set a max width for buttons */
+            text-align: center;            /* Center text within the buttons */
+        }
+        a:hover {
+            background-color: #0056b3;     /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="button-row">
+        <a href="{% url 'webex_calling_wholesale' %}">Webex Calling Wholesale</a>
+        <a href="{% url 'webex_calling_flex' %}">Webex Calling - Flex</a>
+        <a href="{% url 'on_prem_ucm_hybrid' %}">On-Prem UCM Hybrid</a>
+    </div>
+</body>
+</html>
